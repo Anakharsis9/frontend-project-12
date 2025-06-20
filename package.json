@@ -1,0 +1,14 @@
+{
+  "name": "@hexlet/code",
+  "version": "0.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm run build --prefix frontend",
+    "start": "start-server -s ./frontend/dist",
+    "pre-build": "npm install && cd frontend && npm install"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "@hexlet/chat-server": "^2.0.4"
+  }
+}
