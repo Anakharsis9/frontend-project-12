@@ -1,5 +1,7 @@
 import { Outlet, useNavigate } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
+import { Navbar, Container, Button } from "react-bootstrap";
+
 import { logout } from "./features/authSlice";
 
 export const AppLayout = () => {
@@ -8,19 +10,23 @@ export const AppLayout = () => {
   const dispatch = useDispatch();
 
   return (
-    <div>
-      <nav>
-        {token && (
-          <button
-            onClick={() => {
-              dispatch(logout());
-              navigate("/login");
-            }}
-          >
-            Выйти
-          </button>
-        )}
-      </nav>
+    <div className="d-flex flex-column h-100 bg-light">
+      <Navbar expand="lg" variant="light" bg="white" className="shadow-sm">
+        <Container>
+          <Navbar.Brand href="/">Hexlet Chat</Navbar.Brand>
+          {token && (
+            <Button
+              variant="primary"
+              onClick={() => {
+                dispatch(logout());
+                navigate("/login");
+              }}
+            >
+              Выйти
+            </Button>
+          )}
+        </Container>
+      </Navbar>
       <Outlet />
     </div>
   );
