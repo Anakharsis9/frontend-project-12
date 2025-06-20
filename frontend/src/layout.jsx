@@ -6,7 +6,7 @@ import { logout } from "./features/authSlice";
 
 export const AppLayout = () => {
   const navigate = useNavigate();
-  const token = useSelector((state) => state.auth.token);
+  const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
 
   return (
@@ -14,7 +14,7 @@ export const AppLayout = () => {
       <Navbar expand="lg" variant="light" bg="white" className="shadow-sm">
         <Container>
           <Navbar.Brand href="/">Hexlet Chat</Navbar.Brand>
-          {token && (
+          {user && (
             <Button
               variant="primary"
               onClick={() => {

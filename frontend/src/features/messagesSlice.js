@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  messages: [],
+  data: [],
 };
 
 export const messagesSlice = createSlice({
@@ -9,7 +9,7 @@ export const messagesSlice = createSlice({
   initialState,
   reducers: {
     loadMessages: (state, action) => {
-      state.messages = action.payload;
+      state.data = action.payload;
     },
   },
 });

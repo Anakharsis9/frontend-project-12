@@ -5,6 +5,7 @@ import {
   loadChannels,
   switchActiveChannel,
 } from "../../features/channelsSlice";
+import { loadMessages } from "../../features/messagesSlice";
 import {
   Nav,
   Col,
@@ -15,27 +16,38 @@ import {
   DropdownButton,
   Dropdown,
 } from "react-bootstrap";
+import { Chat } from "./chat";
 
 export const HomePage = () => {
   const dispatch = useDispatch();
 
-  const token = useSelector((state) => state.auth.token);
+  const user = useSelector((state) => state.auth.user);
   const channels = useSelector((state) => state.channels.data);
   const activeChannelId = useSelector(
     (state) => state.channels.activeChannelId
   );
 
   useEffect(() => {
+    if (!user) return;
     axios
       .get("/api/v1/channels", {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${user?.token}`,
         },
       })
       .then((response) => {
         dispatch(loadChannels(response.data));
       });
-  }, [token, dispatch]);
+    axios
+      .get("/api/v1/messages", {
+        headers: {
+          Authorization: `Bearer ${user?.token}`,
+        },
+      })
+      .then((response) => {
+        dispatch(loadMessages(response.data));
+      });
+  }, [user, dispatch]);
 
   return (
     <Container className="h-100 my-4 overflow-hidden rounded shadow">
@@ -115,7 +127,9 @@ export const HomePage = () => {
             ))}
           </Nav>
         </Col>
-        <Col className="p-0 h-100"></Col>
+        <Col className="p-0 h-100">
+          <Chat />
+        </Col>
       </Row>
     </Container>
   );

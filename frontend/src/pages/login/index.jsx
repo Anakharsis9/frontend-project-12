@@ -26,7 +26,7 @@ export const LoginPage = () => {
       axios
         .post("/api/v1/login", { username, password })
         .then((response) => {
-          dispatch(login(response.data.token));
+          dispatch(login(response.data));
           navigate("/");
         })
         .catch((err) => {

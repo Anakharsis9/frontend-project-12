@@ -17,11 +17,10 @@ export const router = createBrowserRouter([
         element: <HomePage />,
         loader: () => {
           const state = store.getState();
-          const token = state.auth.token;
-          if (!token) {
+          const user = state.auth.user;
+          if (!user) {
             return replace("/login");
           }
-          return { token };
         },
       },
       {
@@ -29,11 +28,10 @@ export const router = createBrowserRouter([
         element: <LoginPage />,
         loader: () => {
           const state = store.getState();
-          const token = state.auth.token;
-          if (token) {
+          const user = state.auth.user;
+          if (user) {
             return replace("/");
           }
-          return { token };
         },
       },
       {
@@ -41,11 +39,10 @@ export const router = createBrowserRouter([
         element: <SignupPage />,
         loader: () => {
           const state = store.getState();
-          const token = state.auth.token;
-          if (token) {
+          const user = state.auth.user;
+          if (user) {
             return replace("/");
           }
-          return { token };
         },
       },
       {
