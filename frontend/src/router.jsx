@@ -1,5 +1,6 @@
 import { createBrowserRouter, replace } from "react-router";
 import { AppLayout } from "./layout";
+import { store } from "./store";
 
 import { HomePage } from "./pages/home";
 import { LoginPage } from "./pages/login";
@@ -14,7 +15,8 @@ export const router = createBrowserRouter([
         index: true,
         element: <HomePage />,
         loader: () => {
-          const token = localStorage.getItem("token");
+          const state = store.getState();
+          const token = state.auth.token;
           if (!token) {
             return replace("/login");
           }
@@ -25,7 +27,8 @@ export const router = createBrowserRouter([
         path: "/login",
         element: <LoginPage />,
         loader: () => {
-          const token = localStorage.getItem("token");
+          const state = store.getState();
+          const token = state.auth.token;
           if (token) {
             return replace("/");
           }
