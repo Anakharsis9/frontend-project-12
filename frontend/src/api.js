@@ -14,10 +14,9 @@ export const baseQuery = fetchBaseQuery({
     return headers;
   },
 });
-export const makeSocketClient = () =>
-  io({
-    path: "/socket.io",
-    transports: ["websocket"],
-    autoConnect: true,
-    reconnection: true,
-  });
+export const socket = io({
+  path: "/socket.io",
+  transports: ["websocket"],
+  autoConnect: true,
+  reconnection: true,
+});

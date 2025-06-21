@@ -1,6 +1,6 @@
 import { createSlice, createSelector } from "@reduxjs/toolkit";
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { baseQuery, makeSocketClient } from "@/api";
+import { baseQuery, socket } from "@/api";
 
 const initialState = {
   activeChannelId: null,
@@ -40,25 +40,23 @@ export const channelsApi = createApi({
         _,
         { cacheDataLoaded, cacheEntryRemoved, updateCachedData, getCacheEntry }
       ) {
-        const socket = makeSocketClient();
+        const listener = (data) => {
+          if (!getCacheEntry().data.find((channel) => channel.id === data.id)) {
+            updateCachedData((draft) => {
+              draft.push(data);
+            });
+          }
+        };
 
         try {
           await cacheDataLoaded;
-          socket.on("newChannel", (data) => {
-            if (
-              !getCacheEntry().data.find((channel) => channel.id === data.id)
-            ) {
-              updateCachedData((draft) => {
-                draft.push(data);
-              });
-            }
-          });
+          socket.on("newChannel", listener);
         } catch (error) {
           console.error(error);
         }
 
         await cacheEntryRemoved;
-        socket.close();
+        socket.removeListener("newChannel", listener);
       },
     }),
     addChannel: build.mutation({
