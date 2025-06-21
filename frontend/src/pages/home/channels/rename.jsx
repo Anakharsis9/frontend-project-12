@@ -28,16 +28,12 @@ export const RenameChannelModal = ({ show, onHide, channel }) => {
     validateOnBlur: false,
     validateOnChange: false,
     validateOnMount: false,
-    onSubmit: ({ name }, { setSubmitting, resetForm }) => {
-      editChannel({ name, id: channel.id })
-        .then(() => {
-          onHide();
-          resetForm();
-          toast.success("Канал переименован");
-        })
-        .finally(() => {
-          setSubmitting(false);
-        });
+    onSubmit: ({ name }, { resetForm }) => {
+      editChannel({ name, id: channel.id }).then(() => {
+        onHide();
+        resetForm();
+        toast.success("Канал переименован");
+      });
     },
   });
 

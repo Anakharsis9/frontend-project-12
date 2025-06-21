@@ -9,36 +9,32 @@ import {
   Col,
   Card,
 } from "react-bootstrap";
-import { useDispatch } from "react-redux";
 
-import { login } from "@/features/authSlice";
+import { useLoginMutation } from "@/features/authSlice";
+// @ts-ignore
 import formImageSrc from "./form-image.jpg";
-import { apiInstance } from "@/api";
 
 export const LoginPage = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const [login, { isLoading }] = useLoginMutation();
+
   const formik = useFormik({
     initialValues: { username: "", password: "" },
     validateOnBlur: false,
-    validateOnChange: false,
-    onSubmit: ({ username, password }, { setSubmitting, setErrors }) => {
-      apiInstance
-        .post("/api/v1/login", { username, password })
-        .then((response) => {
-          dispatch(login(response.data));
+    validateOnChange: true,
+    onSubmit: ({ username, password }, { setErrors }) => {
+      login({ username, password })
+        .unwrap()
+        .then(() => {
           navigate("/");
         })
-        .catch((err) => {
-          if (err?.response.data?.error?.includes("Unauthorized")) {
+        .catch((response) => {
+          if (response?.data?.error?.includes("Unauthorized")) {
             setErrors({
               username: "Unauthorized",
               password: "Неверные имя пользователя или пароль",
             });
           }
-        })
-        .finally(() => {
-          setSubmitting(false);
         });
     },
   });
@@ -97,7 +93,7 @@ export const LoginPage = () => {
                 <Button
                   variant="outline-primary"
                   type="submit"
-                  disabled={formik.isSubmitting}
+                  disabled={isLoading}
                   className="w-100 mb-3"
                 >
                   Войти

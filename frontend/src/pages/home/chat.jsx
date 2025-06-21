@@ -22,13 +22,12 @@ export const Chat = () => {
 
   const formik = useFormik({
     initialValues: { body: "" },
-    onSubmit: ({ body }, { setSubmitting, resetForm }) => {
+    onSubmit: ({ body }, { resetForm }) => {
       addMessage({
         body,
         channelId: activeChannel.id,
         username: user.username,
       }).finally(() => {
-        setSubmitting(false);
         resetForm();
       });
     },

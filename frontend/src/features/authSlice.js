@@ -1,4 +1,6 @@
+import { baseQuery } from "@/api";
 import { createSlice } from "@reduxjs/toolkit";
+import { createApi } from "@reduxjs/toolkit/query/react";
 
 const userStorage = {
   read: () => {
@@ -37,6 +39,31 @@ export const selectUser = (state) => state.auth.user;
 
 export const { login, logout } = authSlice.actions;
 
+export const authApi = createApi({
+  reducerPath: "authApi",
+  tagTypes: ["auth"],
+  baseQuery,
+  endpoints: (build) => ({
+    login: build.mutation({
+      query: ({ username, password }) => ({
+        url: "/v1/login",
+        method: "POST",
+        body: {
+          username,
+          password,
+        },
+      }),
+      async onQueryStarted(_, { queryFulfilled, dispatch }) {
+        const { data } = await queryFulfilled;
+        dispatch(login(data));
+      },
+    }),
+  }),
+});
+
+export const { useLoginMutation } = authApi;
+
 export default {
   auth: authSlice.reducer,
+  [authApi.reducerPath]: authApi.reducer,
 };

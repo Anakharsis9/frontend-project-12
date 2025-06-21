@@ -31,17 +31,13 @@ const AddNewChannelModal = ({ show, onHide }) => {
     validateOnBlur: false,
     validateOnChange: false,
     validateOnMount: false,
-    onSubmit: ({ name }, { setSubmitting, resetForm }) => {
-      addChannel({ name })
-        .then(({ data }) => {
-          onHide();
-          resetForm();
-          dispatch(switchActiveChannel(data.id));
-          toast.success("Канал создан");
-        })
-        .finally(() => {
-          setSubmitting(false);
-        });
+    onSubmit: ({ name }, { resetForm }) => {
+      addChannel({ name }).then(({ data }) => {
+        onHide();
+        resetForm();
+        dispatch(switchActiveChannel(data.id));
+        toast.success("Канал создан");
+      });
     },
   });
 
