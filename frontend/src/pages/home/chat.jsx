@@ -8,13 +8,16 @@ import {
 } from "@/features/messagesSlice";
 import { selectActiveChannel } from "@/features/channelsSlice";
 import { selectUser } from "@/features/authSlice";
+import { useEffect, useRef } from "react";
 
 export const Chat = () => {
+  const bottomRef = useRef(null);
+  const inputRef = useRef(null);
   const user = useSelector(selectUser);
   const activeChannel = useSelector(selectActiveChannel);
   const messages = useSelector(selectActiveMessages);
 
-  const [addMessage, { isLoading: isAddMessageLoading }] =
+  const [addMessage, { isLoading: isAddMessageLoading, isSuccess }] =
     useAddMessageMutation();
 
   const formik = useFormik({
@@ -31,6 +34,16 @@ export const Chat = () => {
     },
   });
 
+  useEffect(() => {
+    if (isSuccess && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isSuccess]);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({});
+  }, [messages.length]);
+
   return (
     <div className="d-flex flex-column h-100">
       <div className="bg-light mb-4 p-3 shadow-sm small">
@@ -45,6 +58,7 @@ export const Chat = () => {
             <b>{message.username}</b>: {message.body}
           </div>
         ))}
+        <div ref={bottomRef} />
       </div>
       <div className="mt-auto px-5 py-3">
         <Form
@@ -54,6 +68,7 @@ export const Chat = () => {
         >
           <InputGroup>
             <Form.Control
+              ref={inputRef}
               name="body"
               placeholder="Введите сообщение..."
               aria-label="Новое сообщение"
@@ -62,6 +77,7 @@ export const Chat = () => {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               disabled={isAddMessageLoading}
+              autoFocus
             />
             <button
               type="submit"
