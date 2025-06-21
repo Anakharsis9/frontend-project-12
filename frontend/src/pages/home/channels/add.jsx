@@ -6,11 +6,13 @@ import {
 import { useFormik } from "formik";
 import { useState } from "react";
 import { Button, Form, Modal, Spinner } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
 
 const AddNewChannelModal = ({ show, onHide }) => {
+  const { t } = useTranslation();
   const [addChannel, { isLoading: isAddChannelLoading }] =
     useAddChannelMutation();
   const channels = useSelector(selectChannels);
@@ -20,12 +22,12 @@ const AddNewChannelModal = ({ show, onHide }) => {
     initialValues: { name: "" },
     validationSchema: Yup.object().shape({
       name: Yup.string()
-        .min(3, "От 3 до 20 символов")
-        .max(20, "От 3 до 20 символов")
-        .required("Обязательное поле")
+        .min(3, t("common.errors.identityLength"))
+        .max(20, t("common.errors.identityLength"))
+        .required(t("common.errors.required"))
         .notOneOf(
           channels.map((channel) => channel.name),
-          "Должно быть уникальным"
+          t("channels.add.errors.uniqueName")
         ),
     }),
     validateOnBlur: false,
@@ -36,7 +38,7 @@ const AddNewChannelModal = ({ show, onHide }) => {
         onHide();
         resetForm();
         dispatch(switchActiveChannel(data.id));
-        toast.success("Канал создан");
+        toast.success(t("channels.add.successMessage"));
       });
     },
   });
@@ -49,7 +51,7 @@ const AddNewChannelModal = ({ show, onHide }) => {
   return (
     <Modal show={show} onHide={handleHide} centered>
       <Modal.Header closeButton>
-        <Modal.Title>Добавить канал</Modal.Title>
+        <Modal.Title>{t("channels.add.title")}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={formik.handleSubmit}>
@@ -74,7 +76,7 @@ const AddNewChannelModal = ({ show, onHide }) => {
               onClick={handleHide}
               disabled={isAddChannelLoading}
             >
-              Отменить
+              {t("common.actions.cancel")}
             </Button>
             <Button
               variant="primary"
@@ -84,7 +86,7 @@ const AddNewChannelModal = ({ show, onHide }) => {
               {isAddChannelLoading ? (
                 <Spinner variant="secondary" animation="border" size="sm" />
               ) : (
-                "Отправить"
+                t("common.actions.send")
               )}
             </Button>
           </div>

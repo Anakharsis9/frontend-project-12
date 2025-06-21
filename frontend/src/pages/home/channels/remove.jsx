@@ -1,25 +1,27 @@
 import { useRemoveChannelMutation } from "@/features/channelsSlice";
 import { Button, Modal, Spinner } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 
 export const RemoveChannelModal = ({ show, onHide, channelId }) => {
+  const { t } = useTranslation();
   const [removeChannel, { isLoading: isRemoveChannelLoading }] =
     useRemoveChannelMutation();
 
   const handleRemove = () => {
     removeChannel({ id: channelId }).then(() => {
       onHide();
-      toast.success("Канал удалён");
+      toast.success(t("channels.remove.successMessage"));
     });
   };
 
   return (
     <Modal show={show} onHide={onHide} centered>
       <Modal.Header closeButton>
-        <Modal.Title>Удалить канал</Modal.Title>
+        <Modal.Title>{t("channels.remove.title")}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p className="lead">Уверены?</p>
+        <p className="lead">{t("channels.remove.hint")}</p>
         <div className="d-flex justify-content-end">
           <Button
             variant="secondary"
@@ -27,7 +29,7 @@ export const RemoveChannelModal = ({ show, onHide, channelId }) => {
             onClick={onHide}
             disabled={isRemoveChannelLoading}
           >
-            Отменить
+            {t("common.actions.cancel")}
           </Button>
           <Button
             variant="danger"
@@ -38,7 +40,7 @@ export const RemoveChannelModal = ({ show, onHide, channelId }) => {
             {isRemoveChannelLoading ? (
               <Spinner variant="secondary" animation="border" size="sm" />
             ) : (
-              "Удалить"
+              t("channels.remove.action")
             )}
           </Button>
         </div>

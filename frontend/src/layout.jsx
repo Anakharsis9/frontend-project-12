@@ -4,11 +4,13 @@ import { Navbar, Container, Button } from "react-bootstrap";
 
 import { logout, selectUser } from "./features/authSlice";
 import { ToastContainer } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 export const AppLayout = () => {
   const navigate = useNavigate();
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   return (
     <div className="d-flex flex-column h-100 bg-light">
@@ -23,7 +25,7 @@ export const AppLayout = () => {
                 navigate("/login");
               }}
             >
-              Выйти
+              {t("logout")}
             </Button>
           )}
         </Container>

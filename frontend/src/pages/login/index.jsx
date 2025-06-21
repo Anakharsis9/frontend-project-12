@@ -13,10 +13,12 @@ import {
 import { useLoginMutation } from "@/features/authSlice";
 // @ts-ignore
 import formImageSrc from "./form-image.jpg";
+import { useTranslation } from "react-i18next";
 
 export const LoginPage = () => {
   const navigate = useNavigate();
   const [login, { isLoading }] = useLoginMutation();
+  const { t } = useTranslation();
 
   const formik = useFormik({
     initialValues: { username: "", password: "" },
@@ -32,7 +34,7 @@ export const LoginPage = () => {
           if (response?.data?.error?.includes("Unauthorized")) {
             setErrors({
               username: "Unauthorized",
-              password: "Неверные имя пользователя или пароль",
+              password: t("login.errors.unauthorized"),
             });
           }
         });
@@ -52,7 +54,7 @@ export const LoginPage = () => {
               >
                 <img
                   src={formImageSrc}
-                  alt="Войти"
+                  alt={t("login.title")}
                   className="rounded-circle"
                 />
               </Col>
@@ -60,27 +62,33 @@ export const LoginPage = () => {
                 onSubmit={formik.handleSubmit}
                 className="col-12 col-md-6 mt-3 mt-md-0"
               >
-                <h1 className="text-center mb-4">Войти</h1>
-                <FloatingLabel label="Ваш ник" className="mb-3">
+                <h1 className="text-center mb-4">{t("login.title")}</h1>
+                <FloatingLabel
+                  label={t("login.labels.username")}
+                  className="mb-3"
+                >
                   <Form.Control
                     type="text"
                     name="username"
                     autoComplete="username"
                     className="form-control"
-                    placeholder="Ваш ник"
+                    placeholder={t("login.labels.username")}
                     value={formik.values.username}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     isInvalid={!!formik.errors.username}
                   />
                 </FloatingLabel>
-                <FloatingLabel label="Пароль" className="mb-4">
+                <FloatingLabel
+                  label={t("login.labels.password")}
+                  className="mb-4"
+                >
                   <Form.Control
                     type="password"
                     name="password"
                     autoComplete="password"
                     className="form-control"
-                    placeholder="Пароль"
+                    placeholder={t("login.labels.password")}
                     value={formik.values.password}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -96,13 +104,14 @@ export const LoginPage = () => {
                   disabled={isLoading}
                   className="w-100 mb-3"
                 >
-                  Войти
+                  {t("login.labels.action")}
                 </Button>
               </Form>
             </Card.Body>
             <Card.Footer className="p-4">
               <div className="text-center">
-                <span>Нет аккаунта?</span> <Link to="/signup">Регистрация</Link>
+                {t("login.signup.hint")}{" "}
+                <Link to="/signup">{t("login.signup.link")}</Link>
               </div>
             </Card.Footer>
           </Card>

@@ -4,11 +4,13 @@ import {
 } from "@/features/channelsSlice";
 import { useFormik } from "formik";
 import { Button, Form, Modal, Spinner } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
 
 export const RenameChannelModal = ({ show, onHide, channel }) => {
+  const { t } = useTranslation();
   const [editChannel, { isLoading: isEditChannelLoading }] =
     useEditChannelMutation();
   const channels = useSelector(selectChannels);
@@ -17,12 +19,12 @@ export const RenameChannelModal = ({ show, onHide, channel }) => {
     initialValues: { name: channel.name },
     validationSchema: Yup.object().shape({
       name: Yup.string()
-        .min(3, "От 3 до 20 символов")
-        .max(20, "От 3 до 20 символов")
-        .required("Обязательное поле")
+        .min(3, t("common.errors.identityLength"))
+        .max(20, t("common.errors.identityLength"))
+        .required(t("common.errors.required"))
         .notOneOf(
           channels.map((channel) => channel.name),
-          "Должно быть уникальным"
+          t("common.errors.uniqueName")
         ),
     }),
     validateOnBlur: false,
@@ -32,7 +34,7 @@ export const RenameChannelModal = ({ show, onHide, channel }) => {
       editChannel({ name, id: channel.id }).then(() => {
         onHide();
         resetForm();
-        toast.success("Канал переименован");
+        toast.success(t("channels.rename.successMessage"));
       });
     },
   });
@@ -45,7 +47,7 @@ export const RenameChannelModal = ({ show, onHide, channel }) => {
   return (
     <Modal show={show} onHide={handleHide} centered>
       <Modal.Header closeButton>
-        <Modal.Title>Переименовать канал</Modal.Title>
+        <Modal.Title>{t("channels.rename.title")}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={formik.handleSubmit}>
@@ -70,7 +72,7 @@ export const RenameChannelModal = ({ show, onHide, channel }) => {
               onClick={handleHide}
               disabled={isEditChannelLoading}
             >
-              Отменить
+              {t("common.actions.cancel")}
             </Button>
             <Button
               variant="primary"
@@ -80,7 +82,7 @@ export const RenameChannelModal = ({ show, onHide, channel }) => {
               {isEditChannelLoading ? (
                 <Spinner variant="secondary" animation="border" size="sm" />
               ) : (
-                "Отправить"
+                t("common.actions.send")
               )}
             </Button>
           </div>

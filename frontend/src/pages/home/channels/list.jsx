@@ -9,8 +9,10 @@ import { AddNewChannelButton } from "./add";
 import { RemoveChannelModal } from "./remove";
 import { useState } from "react";
 import { RenameChannelModal } from "./rename";
+import { useTranslation } from "react-i18next";
 
 const ChannelListItem = ({ channel, isActive }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const [showRemoveModal, setShowRemoveModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -36,10 +38,10 @@ const ChannelListItem = ({ channel, isActive }) => {
             <Dropdown.Toggle split variant={isActive ? "secondary" : "none"} />
             <Dropdown.Menu>
               <Dropdown.Item onClick={() => setShowRemoveModal(true)}>
-                Удалить
+                {t("channels.remove.action")}
               </Dropdown.Item>
               <Dropdown.Item onClick={() => setShowEditModal(true)}>
-                Переименовать
+                {t("channels.rename.action")}
               </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
@@ -69,13 +71,14 @@ const ChannelListItem = ({ channel, isActive }) => {
 };
 
 export const ChannelsList = () => {
+  const { t } = useTranslation();
   const { data: channels } = useGetChannelsQuery();
   const activeChannelId = useSelector(selectActiveChannelId);
 
   return (
     <>
       <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
-        <b>Каналы</b>
+        <b>{t("channels.title")}</b>
         <AddNewChannelButton />
       </div>
       <Nav
