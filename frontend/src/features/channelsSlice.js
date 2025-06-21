@@ -2,6 +2,16 @@ import { createSlice, createSelector } from "@reduxjs/toolkit";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQuery, socket } from "@/api";
 
+export const selectActiveChannelId = (state) => state.channels.activeChannelId;
+
+export const selectChannels = (state) =>
+  state.channelsApi.queries["getChannels(undefined)"]?.data ?? [];
+
+export const selectActiveChannel = createSelector(
+  [selectChannels, selectActiveChannelId],
+  (channels, activeChannelId) => channels.find((c) => c.id === activeChannelId)
+);
+
 const initialState = {
   activeChannelId: null,
 };
@@ -31,32 +41,51 @@ export const channelsApi = createApi({
       async onQueryStarted(_, { queryFulfilled, dispatch }) {
         try {
           const { data } = await queryFulfilled;
-          dispatch(switchActiveChannel(data[0].id));
+          dispatch(switchActiveChannel(data[0]?.id));
         } catch (error) {
           console.error(error);
         }
       },
       async onCacheEntryAdded(
         _,
-        { cacheDataLoaded, cacheEntryRemoved, updateCachedData, getCacheEntry }
+        {
+          cacheDataLoaded,
+          cacheEntryRemoved,
+          updateCachedData,
+          getCacheEntry,
+          getState,
+          dispatch,
+        }
       ) {
-        const listener = (data) => {
+        const newChannelListener = (data) => {
           if (!getCacheEntry().data.find((channel) => channel.id === data.id)) {
             updateCachedData((draft) => {
               draft.push(data);
             });
           }
         };
+        const removeChannelListener = (data) => {
+          // @ts-ignore
+          if (selectActiveChannelId(getState()) === data.id) {
+            const channels = selectChannels(getState());
+            dispatch(switchActiveChannel(channels[0]?.id));
+          }
+          updateCachedData((draft) => {
+            return draft.filter((channel) => channel.id !== data.id);
+          });
+        };
 
         try {
           await cacheDataLoaded;
-          socket.on("newChannel", listener);
+          socket.on("newChannel", newChannelListener);
+          socket.on("removeChannel", removeChannelListener);
         } catch (error) {
           console.error(error);
         }
 
         await cacheEntryRemoved;
-        socket.removeListener("newChannel", listener);
+        socket.removeListener("newChannel", newChannelListener);
+        socket.removeListener("removeChannel", removeChannelListener);
       },
     }),
     addChannel: build.mutation({
@@ -68,20 +97,20 @@ export const channelsApi = createApi({
         },
       }),
     }),
+    removeChannel: build.mutation({
+      query: ({ id }) => ({
+        url: `/v1/channels/${id}`,
+        method: "DELETE",
+      }),
+    }),
   }),
 });
 
-export const { useGetChannelsQuery, useAddChannelMutation } = channelsApi;
-
-export const selectActiveChannelId = (state) => state.channels.activeChannelId;
-
-export const selectChannels = (state) =>
-  state.channelsApi.queries["getChannels(undefined)"]?.data ?? [];
-
-export const selectActiveChannel = createSelector(
-  [selectChannels, selectActiveChannelId],
-  (channels, activeChannelId) => channels.find((c) => c.id === activeChannelId)
-);
+export const {
+  useGetChannelsQuery,
+  useAddChannelMutation,
+  useRemoveChannelMutation,
+} = channelsApi;
 
 export default {
   channels: channelsSlice.reducer,

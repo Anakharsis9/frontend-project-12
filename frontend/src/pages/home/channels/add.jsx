@@ -34,13 +34,13 @@ const AddNewChannelModal = ({ show, onHide }) => {
     onSubmit: async ({ name }, { setSubmitting, resetForm }) => {
       addChannel({ name })
         .then(({ data }) => {
-          dispatch(switchActiveChannel(data.id));
-        })
-        .finally(() => {
           onHide();
           resetForm();
-          setSubmitting(false);
+          dispatch(switchActiveChannel(data.id));
           toast.success("Канал создан");
+        })
+        .finally(() => {
+          setSubmitting(false);
         });
     },
   });
