@@ -1,6 +1,6 @@
 import { Col, Container, Row, Spinner } from "react-bootstrap";
 import { Chat } from "./chat";
-import { ChannelsList } from "./channels";
+import { ChannelsList } from "./channels/list";
 import { useGetChannelsQuery } from "@/features/channelsSlice";
 import { useGetMessagesQuery } from "@/features/messagesSlice";
 

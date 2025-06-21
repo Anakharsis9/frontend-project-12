@@ -105,7 +105,7 @@ export const LoginPage = () => {
               </Form>
             </Card.Body>
             <Card.Footer className="p-4">
-              <div class="text-center">
+              <div className="text-center">
                 <span>Нет аккаунта?</span> <Link to="/signup">Регистрация</Link>
               </div>
             </Card.Footer>
