@@ -14,10 +14,21 @@ export const messagesApi = createApi({
         method: "GET",
       }),
     }),
+    addMessage: build.mutation({
+      query: ({ body, channelId, username }) => ({
+        url: "/v1/messages",
+        method: "POST",
+        body: {
+          body,
+          channelId,
+          username,
+        },
+      }),
+    }),
   }),
 });
 
-export const { useGetMessagesQuery } = messagesApi;
+export const { useGetMessagesQuery, useAddMessageMutation } = messagesApi;
 
 export const selectMessages = (state) =>
   state.messagesApi.queries["getMessages(undefined)"]?.data ?? [];

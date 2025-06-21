@@ -1,20 +1,33 @@
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { Form, InputGroup } from "react-bootstrap";
 import { useFormik } from "formik";
 
-import { selectActiveMessages } from "@/features/messagesSlice";
+import {
+  selectActiveMessages,
+  useAddMessageMutation,
+} from "@/features/messagesSlice";
 import { selectActiveChannel } from "@/features/channelsSlice";
+import { selectUser } from "@/features/authSlice";
 
 export const Chat = () => {
-  const dispatch = useDispatch();
-
+  const user = useSelector(selectUser);
   const activeChannel = useSelector(selectActiveChannel);
   const messages = useSelector(selectActiveMessages);
 
+  const [addMessage, { isLoading: isAddMessageLoading }] =
+    useAddMessageMutation();
+
   const formik = useFormik({
     initialValues: { body: "" },
-    onSubmit: (_, { setSubmitting }) => {
-      setSubmitting(false);
+    onSubmit: ({ body }, { setSubmitting, resetForm }) => {
+      addMessage({
+        body,
+        channelId: activeChannel.id,
+        username: user.username,
+      }).finally(() => {
+        setSubmitting(false);
+        resetForm();
+      });
     },
   });
 
@@ -48,10 +61,11 @@ export const Chat = () => {
               value={formik.values.body}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
+              disabled={isAddMessageLoading}
             />
             <button
               type="submit"
-              disabled={!formik.values.body}
+              disabled={!formik.values.body || isAddMessageLoading}
               className="btn btn-group-vertical"
             >
               <svg

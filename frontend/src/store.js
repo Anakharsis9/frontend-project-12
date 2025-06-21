@@ -6,7 +6,7 @@ import messagesSlice, { messagesApi } from "./features/messagesSlice";
 
 export const store = configureStore({
   reducer: {
-    auth: authReducer,
+    ...authReducer,
     ...channelsSlice,
     ...messagesSlice,
   },
