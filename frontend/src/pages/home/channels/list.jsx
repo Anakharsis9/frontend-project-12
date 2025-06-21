@@ -8,10 +8,12 @@ import { useGetChannelsQuery } from "@/features/channelsSlice";
 import { AddNewChannelButton } from "./add";
 import { RemoveChannelModal } from "./remove";
 import { useState } from "react";
+import { RenameChannelModal } from "./rename";
 
 const ChannelListItem = ({ channel, isActive }) => {
   const dispatch = useDispatch();
   const [showRemoveModal, setShowRemoveModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
 
   return (
     <>
@@ -36,7 +38,9 @@ const ChannelListItem = ({ channel, isActive }) => {
               <Dropdown.Item onClick={() => setShowRemoveModal(true)}>
                 Удалить
               </Dropdown.Item>
-              <Dropdown.Item>Переименовать</Dropdown.Item>
+              <Dropdown.Item onClick={() => setShowEditModal(true)}>
+                Переименовать
+              </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
         ) : (
@@ -54,6 +58,11 @@ const ChannelListItem = ({ channel, isActive }) => {
         show={showRemoveModal}
         onHide={() => setShowRemoveModal(false)}
         channelId={channel.id}
+      />
+      <RenameChannelModal
+        show={showEditModal}
+        onHide={() => setShowEditModal(false)}
+        channel={channel}
       />
     </>
   );

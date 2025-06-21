@@ -52,13 +52,13 @@ export const channelsApi = createApi({
           cacheDataLoaded,
           cacheEntryRemoved,
           updateCachedData,
-          getCacheEntry,
           getState,
           dispatch,
         }
       ) {
         const newChannelListener = (data) => {
-          if (!getCacheEntry().data.find((channel) => channel.id === data.id)) {
+          const channels = selectChannels(getState());
+          if (!channels.find((channel) => channel.id === data.id)) {
             updateCachedData((draft) => {
               draft.push(data);
             });
@@ -74,11 +74,22 @@ export const channelsApi = createApi({
             return draft.filter((channel) => channel.id !== data.id);
           });
         };
+        const renameChannelListener = (data) => {
+          updateCachedData((draft) => {
+            return draft.map((channel) => {
+              if (channel.id === data.id) {
+                return data;
+              }
+              return channel;
+            });
+          });
+        };
 
         try {
           await cacheDataLoaded;
           socket.on("newChannel", newChannelListener);
           socket.on("removeChannel", removeChannelListener);
+          socket.on("renameChannel", renameChannelListener);
         } catch (error) {
           console.error(error);
         }
@@ -86,6 +97,7 @@ export const channelsApi = createApi({
         await cacheEntryRemoved;
         socket.removeListener("newChannel", newChannelListener);
         socket.removeListener("removeChannel", removeChannelListener);
+        socket.removeListener("renameChannel", renameChannelListener);
       },
     }),
     addChannel: build.mutation({
@@ -103,6 +115,15 @@ export const channelsApi = createApi({
         method: "DELETE",
       }),
     }),
+    editChannel: build.mutation({
+      query: ({ id, name }) => ({
+        url: `/v1/channels/${id}`,
+        method: "PATCH",
+        body: {
+          name,
+        },
+      }),
+    }),
   }),
 });
 
@@ -110,6 +131,7 @@ export const {
   useGetChannelsQuery,
   useAddChannelMutation,
   useRemoveChannelMutation,
+  useEditChannelMutation,
 } = channelsApi;
 
 export default {
