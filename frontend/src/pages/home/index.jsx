@@ -1,12 +1,14 @@
 import { Col, Container, Row, Spinner } from "react-bootstrap";
 import { Chat } from "./chat";
 import { ChannelsList } from "./channels";
-import { useGetChannelsQuery } from "../../features/channelsSlice";
+import { useGetChannelsQuery } from "@/features/channelsSlice";
+import { useGetMessagesQuery } from "@/features/messagesSlice";
 
 export const HomePage = () => {
   const { isLoading: areChannelsLoading } = useGetChannelsQuery();
+  const { isLoading: areMessagesLoading } = useGetMessagesQuery();
 
-  if (areChannelsLoading) {
+  if (areChannelsLoading || areMessagesLoading) {
     return (
       <div className="d-flex justify-content-center align-items-center h-100">
         <Spinner animation="border" variant="primary" />

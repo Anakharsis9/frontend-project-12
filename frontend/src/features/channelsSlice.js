@@ -1,5 +1,6 @@
 import { createSlice, createSelector } from "@reduxjs/toolkit";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi } from "@reduxjs/toolkit/query/react";
+import { baseQuery } from "@/api";
 
 const initialState = {
   activeChannelId: null,
@@ -20,16 +21,7 @@ export const { switchActiveChannel } = channelsSlice.actions;
 export const channelsApi = createApi({
   reducerPath: "channelsApi",
   tagTypes: ["channels"],
-  baseQuery: fetchBaseQuery({
-    baseUrl: "/api",
-    prepareHeaders: (headers, { getState }) => {
-      const user = getState().auth.user;
-      if (user?.token) {
-        headers.set("Authorization", `Bearer ${user.token}`);
-      }
-      return headers;
-    },
-  }),
+  baseQuery,
   endpoints: (build) => ({
     getChannels: build.query({
       query: () => ({

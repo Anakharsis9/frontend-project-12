@@ -11,9 +11,9 @@ import {
 } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 
-import { login } from "../../features/authSlice";
+import { login } from "@/features/authSlice";
 import formImageSrc from "./form-image.jpg";
-import { apiInstance } from "../../api";
+import { apiInstance } from "@/api";
 
 export const LoginPage = () => {
   const navigate = useNavigate();

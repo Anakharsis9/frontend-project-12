@@ -1,7 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
-import { switchActiveChannel } from "../../features/channelsSlice";
+import {
+  selectActiveChannelId,
+  switchActiveChannel,
+} from "@/features/channelsSlice";
 import { Nav, Button, ButtonGroup, Dropdown } from "react-bootstrap";
-import { useGetChannelsQuery } from "../../features/channelsSlice";
+import { useGetChannelsQuery } from "@/features/channelsSlice";
 
 const ChannelListItem = ({ channel, isActive }) => {
   const dispatch = useDispatch();
@@ -45,9 +48,7 @@ const ChannelListItem = ({ channel, isActive }) => {
 
 export const ChannelsList = () => {
   const { data: channels } = useGetChannelsQuery();
-  const activeChannelId = useSelector(
-    (state) => state.channels.activeChannelId
-  );
+  const activeChannelId = useSelector(selectActiveChannelId);
 
   return (
     <>

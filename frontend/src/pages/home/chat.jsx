@@ -1,34 +1,15 @@
 import { useSelector, useDispatch } from "react-redux";
 import { Form, InputGroup } from "react-bootstrap";
 import { useFormik } from "formik";
-import { useEffect } from "react";
 
-import { loadMessages } from "../../features/messagesSlice";
-import { apiInstance } from "../../api";
-import { selectActiveChannel } from "../../features/channelsSlice";
+import { selectActiveMessages } from "@/features/messagesSlice";
+import { selectActiveChannel } from "@/features/channelsSlice";
 
 export const Chat = () => {
   const dispatch = useDispatch();
 
-  const user = useSelector((state) => state.auth.user);
-  useEffect(() => {
-    if (!user) return;
-    apiInstance
-      .get("/api/v1/messages", {
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
-      })
-      .then((response) => {
-        dispatch(loadMessages(response.data));
-      });
-  }, [user, dispatch]);
-
   const activeChannel = useSelector(selectActiveChannel);
-  const allMessages = useSelector((state) => state.messages.data);
-  const messages =
-    allMessages?.filter((message) => message.channelId === activeChannel?.id) ??
-    [];
+  const messages = useSelector(selectActiveMessages);
 
   const formik = useFormik({
     initialValues: { body: "" },
