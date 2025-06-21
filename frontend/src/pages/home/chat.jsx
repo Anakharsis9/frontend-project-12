@@ -1,37 +1,44 @@
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { Form, InputGroup } from "react-bootstrap";
 import { useFormik } from "formik";
+import { useEffect } from "react";
 import axios from "axios";
 
+import { loadMessages } from "../../features/messagesSlice";
+
 export const Chat = () => {
-  const messages = useSelector((state) => state.messages.data);
+  const dispatch = useDispatch();
+
+  const user = useSelector((state) => state.auth.user);
+  useEffect(() => {
+    if (!user) return;
+    axios
+      .get("/api/v1/messages", {
+        headers: {
+          Authorization: `Bearer ${user?.token}`,
+        },
+      })
+      .then((response) => {
+        dispatch(loadMessages(response.data));
+      });
+  }, [user, dispatch]);
+
   const activeChannelId = useSelector(
     (state) => state.channels.activeChannelId
   );
+  const channels = useSelector((state) => state.channels.data);
+  const activeChannel = channels?.find(
+    (channel) => channel.id === activeChannelId
+  );
+  const allMessages = useSelector((state) => state.messages.data);
+  const messages =
+    allMessages?.filter((message) => message.channelId === activeChannelId) ??
+    [];
 
   const formik = useFormik({
-    initialValues: { message: "" },
-    onSubmit: ({ message }, { setSubmitting, setErrors }) => {
-      // axios
-      //   .post("/api/v1/messages", {
-      //     body: message,
-      //     channelId: activeChannelId,
-      //     username: "admin",
-      //   })
-      //   .then((response) => {
-      //     dispatch(login(response.data.user.token));
-      //     navigate("/");
-      //   })
-      //   .catch((err) => {
-      //     if (err?.response.data?.error?.includes("Unauthorized")) {
-      //       setErrors({
-      //         username: "Unauthorized",
-      //         password: "Неверные имя пользователя или пароль",
-      //       });
-      //     }
-      //   })
-      //   .finally(() => {
-      //     setSubmitting(false);
-      //   });
+    initialValues: { body: "" },
+    onSubmit: (_, { setSubmitting }) => {
+      setSubmitting(false);
     },
   });
 
@@ -39,24 +46,36 @@ export const Chat = () => {
     <div className="d-flex flex-column h-100">
       <div className="bg-light mb-4 p-3 shadow-sm small">
         <p className="m-0">
-          <b># test</b>
+          <b># {activeChannel?.name}</b>
         </p>
-        <span className="text-muted">0 сообщений</span>
+        <span className="text-muted">{messages.length} сообщений</span>
       </div>
-      <div className="overflow-auto px-5"></div>
+      <div className="overflow-auto px-5">
+        {messages.map((message) => (
+          <div key={message.id} className="text-break mb-2">
+            <b>{message.username}</b>: {message.body}
+          </div>
+        ))}
+      </div>
       <div className="mt-auto px-5 py-3">
-        <form novalidate="" className="py-1 border rounded-2">
-          <div className="input-group has-validation">
-            <input
+        <Form
+          noValidate
+          className="py-1 border rounded-2"
+          onSubmit={formik.handleSubmit}
+        >
+          <InputGroup>
+            <Form.Control
               name="body"
-              aria-label="Новое сообщение"
               placeholder="Введите сообщение..."
-              className="border-0 p-0 ps-2 form-control"
-              value=""
+              aria-label="Новое сообщение"
+              className="border-0 p-0 ps-2"
+              value={formik.values.body}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
             />
             <button
               type="submit"
-              disabled=""
+              disabled={!formik.values.body}
               className="btn btn-group-vertical"
             >
               <svg
@@ -68,14 +87,14 @@ export const Chat = () => {
                 className="bi bi-arrow-right-square"
               >
                 <path
-                  fill-rule="evenodd"
+                  fillRule="evenodd"
                   d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm4.5 5.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"
                 ></path>
               </svg>
               <span className="visually-hidden">Отправить</span>
             </button>
-          </div>
-        </form>
+          </InputGroup>
+        </Form>
       </div>
     </div>
   );
