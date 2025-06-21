@@ -58,10 +58,24 @@ export const authApi = createApi({
         dispatch(login(data));
       },
     }),
+    signup: build.mutation({
+      query: ({ username, password }) => ({
+        url: "/v1/signup",
+        method: "POST",
+        body: {
+          username,
+          password,
+        },
+      }),
+      async onQueryStarted(_, { queryFulfilled, dispatch }) {
+        const { data } = await queryFulfilled;
+        dispatch(login(data));
+      },
+    }),
   }),
 });
 
-export const { useLoginMutation } = authApi;
+export const { useLoginMutation, useSignupMutation } = authApi;
 
 export default {
   auth: authSlice.reducer,

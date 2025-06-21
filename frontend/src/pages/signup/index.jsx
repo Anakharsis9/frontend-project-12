@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import { useNavigate, Link } from "react-router";
+import { useNavigate } from "react-router";
 import {
   FloatingLabel,
   Button,
@@ -9,17 +9,16 @@ import {
   Col,
   Card,
 } from "react-bootstrap";
-import { useDispatch } from "react-redux";
 import * as Yup from "yup";
 
-import { login } from "@/features/authSlice";
+import { useSignupMutation } from "@/features/authSlice";
 // @ts-ignore
 import formImageSrc from "./form-image.jpg";
-import { apiInstance } from "@/api";
 
 export const SignupPage = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const [signup, { isLoading }] = useSignupMutation();
+
   const formik = useFormik({
     initialValues: { username: "", password: "", confirmPassword: "" },
     validateOnBlur: false,
@@ -37,7 +36,20 @@ export const SignupPage = () => {
         "Пароли должны совпадать"
       ),
     }),
-    onSubmit: ({ username, password }, { setErrors }) => {},
+    onSubmit: ({ username, password }, { setErrors }) => {
+      signup({ username, password })
+        .unwrap()
+        .then(() => {
+          navigate("/");
+        })
+        .catch((response) => {
+          if (response?.data?.error?.includes("Conflict")) {
+            setErrors({
+              username: "Такой пользователь уже существует",
+            });
+          }
+        });
+    },
   });
 
   return (
@@ -106,7 +118,7 @@ export const SignupPage = () => {
                 <Button
                   variant="outline-primary"
                   type="submit"
-                  disabled={formik.isSubmitting}
+                  disabled={isLoading}
                   className="w-100"
                 >
                   Зарегистрироваться
