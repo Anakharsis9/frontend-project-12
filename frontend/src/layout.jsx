@@ -2,11 +2,12 @@ import { Outlet, useNavigate } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import { Navbar, Container, Button } from "react-bootstrap";
 
-import { logout } from "./features/authSlice";
+import { logout, selectUser } from "./features/authSlice";
+import { ToastContainer } from "react-toastify";
 
 export const AppLayout = () => {
   const navigate = useNavigate();
-  const user = useSelector((state) => state.auth.user);
+  const user = useSelector(selectUser);
   const dispatch = useDispatch();
 
   return (
@@ -28,6 +29,7 @@ export const AppLayout = () => {
         </Container>
       </Navbar>
       <Outlet />
+      <ToastContainer />
     </div>
   );
 };

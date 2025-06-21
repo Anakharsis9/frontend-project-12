@@ -7,6 +7,7 @@ import { useFormik } from "formik";
 import { useState } from "react";
 import { Button, Form, Modal, Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import * as Yup from "yup";
 
 const AddNewChannelModal = ({ show, onHide }) => {
@@ -39,6 +40,7 @@ const AddNewChannelModal = ({ show, onHide }) => {
           onHide();
           resetForm();
           setSubmitting(false);
+          toast.success("Канал создан");
         });
     },
   });
