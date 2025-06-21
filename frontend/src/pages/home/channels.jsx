@@ -1,9 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { switchActiveChannel } from "../../features/channelsSlice";
 import { Nav, Button, ButtonGroup, Dropdown } from "react-bootstrap";
-import axios from "axios";
-import { useEffect } from "react";
-import { loadChannels } from "../../features/channelsSlice";
+import { useGetChannelsQuery } from "../../features/channelsSlice";
 
 const ChannelListItem = ({ channel, isActive }) => {
   const dispatch = useDispatch();
@@ -46,26 +44,10 @@ const ChannelListItem = ({ channel, isActive }) => {
 };
 
 export const ChannelsList = () => {
-  const dispatch = useDispatch();
-
-  const user = useSelector((state) => state.auth.user);
-  const channels = useSelector((state) => state.channels.data);
+  const { data: channels } = useGetChannelsQuery();
   const activeChannelId = useSelector(
     (state) => state.channels.activeChannelId
   );
-
-  useEffect(() => {
-    if (!user) return;
-    axios
-      .get("/api/v1/channels", {
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
-      })
-      .then((response) => {
-        dispatch(loadChannels(response.data));
-      });
-  }, [user, dispatch]);
 
   return (
     <>

@@ -2,9 +2,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { Form, InputGroup } from "react-bootstrap";
 import { useFormik } from "formik";
 import { useEffect } from "react";
-import axios from "axios";
 
 import { loadMessages } from "../../features/messagesSlice";
+import { apiInstance } from "../../api";
+import { selectActiveChannel } from "../../features/channelsSlice";
 
 export const Chat = () => {
   const dispatch = useDispatch();
@@ -12,7 +13,7 @@ export const Chat = () => {
   const user = useSelector((state) => state.auth.user);
   useEffect(() => {
     if (!user) return;
-    axios
+    apiInstance
       .get("/api/v1/messages", {
         headers: {
           Authorization: `Bearer ${user?.token}`,
@@ -23,16 +24,10 @@ export const Chat = () => {
       });
   }, [user, dispatch]);
 
-  const activeChannelId = useSelector(
-    (state) => state.channels.activeChannelId
-  );
-  const channels = useSelector((state) => state.channels.data);
-  const activeChannel = channels?.find(
-    (channel) => channel.id === activeChannelId
-  );
+  const activeChannel = useSelector(selectActiveChannel);
   const allMessages = useSelector((state) => state.messages.data);
   const messages =
-    allMessages?.filter((message) => message.channelId === activeChannelId) ??
+    allMessages?.filter((message) => message.channelId === activeChannel?.id) ??
     [];
 
   const formik = useFormik({

@@ -10,10 +10,10 @@ import {
   Card,
 } from "react-bootstrap";
 import { useDispatch } from "react-redux";
-import axios from "axios";
 
 import { login } from "../../features/authSlice";
 import formImageSrc from "./form-image.jpg";
+import { apiInstance } from "../../api";
 
 export const LoginPage = () => {
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ export const LoginPage = () => {
     validateOnBlur: false,
     validateOnChange: false,
     onSubmit: ({ username, password }, { setSubmitting, setErrors }) => {
-      axios
+      apiInstance
         .post("/api/v1/login", { username, password })
         .then((response) => {
           dispatch(login(response.data));
