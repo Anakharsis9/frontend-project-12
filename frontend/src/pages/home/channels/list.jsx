@@ -30,6 +30,7 @@ const ChannelListItem = ({ channel, isActive }) => {
               variant={isActive ? "secondary" : "none"}
               className="w-100 rounded-0 text-start text-truncate"
               onClick={() => dispatch(switchActiveChannel(channel.id))}
+              name={channel.name}
             >
               <span className="me-1">#</span>
               {channel.name}
@@ -50,6 +51,7 @@ const ChannelListItem = ({ channel, isActive }) => {
             className="w-100 text-start rounded-0"
             variant={isActive ? "secondary" : "none"}
             onClick={() => dispatch(switchActiveChannel(channel.id))}
+            name={channel.name}
           >
             <span className="me-1">#</span>
             {channel.name}
