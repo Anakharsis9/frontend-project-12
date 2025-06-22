@@ -5,6 +5,8 @@ export const en = {
         identityLength: "From 3 to 20 characters",
         required: "Required field",
         uniqueName: "Must be unique",
+        networkOffline: "Connection error",
+        networkOnline: "Connection restored",
       },
       actions: {
         cancel: "Cancel",
