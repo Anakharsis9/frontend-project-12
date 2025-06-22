@@ -58,7 +58,7 @@ export const Chat = () => {
           {t("chat.messageCount", { n: messages.length })}
         </span>
       </div>
-      <div className="overflow-auto px-5">
+      <div id="chat" className="overflow-auto px-5">
         {messages.map((message) => (
           <div key={message.id} className="text-break mb-2">
             <b>{message.username}</b>: {message.body}
@@ -83,6 +83,7 @@ export const Chat = () => {
               onBlur={formik.handleBlur}
               disabled={isAddMessageLoading}
               autoFocus
+              aria-label={t("chat.labels.aria")}
             />
             <button
               type="submit"

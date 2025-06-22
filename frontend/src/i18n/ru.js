@@ -49,13 +49,16 @@ export const ru = {
       labels: {
         messageBody: "Введите сообщение...",
         action: "Отправить",
+        aria: "Новое сообщение",
       },
     },
     channels: {
       title: "Каналы",
+      dropdownAria: "Управление каналом",
       add: {
         title: "Добавить канал",
         successMessage: "Канал создан",
+        aria: "Имя канала",
       },
       remove: {
         action: "Удалить",

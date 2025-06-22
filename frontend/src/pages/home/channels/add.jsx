@@ -56,6 +56,7 @@ const AddNewChannelModal = ({ show, onHide }) => {
       <Modal.Body>
         <Form onSubmit={formik.handleSubmit}>
           <Form.Control
+            id="name"
             type="text"
             autoFocus
             name="name"
@@ -66,6 +67,9 @@ const AddNewChannelModal = ({ show, onHide }) => {
             className="mb-2"
             disabled={isAddChannelLoading}
           />
+          <label htmlFor="name" className="visually-hidden">
+            {t("channels.add.aria")}
+          </label>
           <Form.Control.Feedback type="invalid">
             {formik.errors.name}
           </Form.Control.Feedback>

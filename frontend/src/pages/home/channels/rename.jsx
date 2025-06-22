@@ -52,6 +52,7 @@ export const RenameChannelModal = ({ show, onHide, channel }) => {
       <Modal.Body>
         <Form onSubmit={formik.handleSubmit}>
           <Form.Control
+            id="name"
             type="text"
             autoFocus
             name="name"
@@ -62,6 +63,9 @@ export const RenameChannelModal = ({ show, onHide, channel }) => {
             className="mb-2"
             disabled={isEditChannelLoading}
           />
+          <label htmlFor="name" className="visually-hidden">
+            {t("channels.add.aria")}
+          </label>
           <Form.Control.Feedback type="invalid">
             {formik.errors.name}
           </Form.Control.Feedback>

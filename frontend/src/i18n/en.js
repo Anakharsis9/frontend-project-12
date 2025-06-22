@@ -49,13 +49,16 @@ export const en = {
       labels: {
         messageBody: "Type a message...",
         action: "Send",
+        aria: "New message",
       },
     },
     channels: {
       title: "Channels",
+      dropdownAria: "Channel settings",
       add: {
         title: "Add channel",
         successMessage: "Channel created",
+        aria: "Channel name",
       },
       remove: {
         action: "Remove",

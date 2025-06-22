@@ -36,7 +36,11 @@ const ChannelListItem = ({ channel, isActive }) => {
               {channel.name}
             </Button>
 
-            <Dropdown.Toggle split variant={isActive ? "secondary" : "none"} />
+            <Dropdown.Toggle split variant={isActive ? "secondary" : "none"}>
+              <span className="visually-hidden">
+                {t("channels.dropdownAria")}
+              </span>
+            </Dropdown.Toggle>
             <Dropdown.Menu>
               <Dropdown.Item onClick={() => setShowRemoveModal(true)}>
                 {t("channels.remove.action")}
