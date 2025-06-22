@@ -5,8 +5,8 @@ export const ru = {
         identityLength: "От 3 до 20 символов",
         required: "Обязательное поле",
         uniqueName: "Должно быть уникальным",
-        networkOffline: "Отсутствует подключение к интернету",
-        networkOnline: "Подключение к интернету восстановлено",
+        networkOffline: "Ошибка соединения",
+        networkOnline: "Соединение восстановлено",
       },
       actions: {
         cancel: "Отменить",
