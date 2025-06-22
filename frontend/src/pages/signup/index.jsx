@@ -70,6 +70,7 @@ export const SignupPage = () => {
                 <FloatingLabel
                   label={t("signup.labels.username")}
                   className="mb-3"
+                  controlId="username"
                 >
                   <Form.Control
                     type="text"
@@ -91,6 +92,7 @@ export const SignupPage = () => {
                 <FloatingLabel
                   label={t("signup.labels.password")}
                   className="mb-3"
+                  controlId="password"
                 >
                   <Form.Control
                     type="password"
@@ -112,6 +114,7 @@ export const SignupPage = () => {
                 <FloatingLabel
                   label={t("signup.labels.confirmPassword")}
                   className="mb-4"
+                  controlId="confirmPassword"
                 >
                   <Form.Control
                     type="password"

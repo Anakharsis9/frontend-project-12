@@ -66,6 +66,7 @@ export const LoginPage = () => {
                 <FloatingLabel
                   label={t("login.labels.username")}
                   className="mb-3"
+                  controlId="username"
                 >
                   <Form.Control
                     type="text"
@@ -82,6 +83,7 @@ export const LoginPage = () => {
                 <FloatingLabel
                   label={t("login.labels.password")}
                   className="mb-4"
+                  controlId="password"
                 >
                   <Form.Control
                     type="password"
