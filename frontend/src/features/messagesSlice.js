@@ -2,6 +2,7 @@ import { baseQuery, socket } from "@/api";
 import { createSelector } from "@reduxjs/toolkit";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { selectActiveChannelId } from "./channelsSlice";
+import { profanity } from "@/profanity";
 
 export const messagesApi = createApi({
   reducerPath: "messagesApi",
@@ -40,7 +41,7 @@ export const messagesApi = createApi({
         url: "/v1/messages",
         method: "POST",
         body: {
-          body,
+          body: profanity.censor(body),
           channelId,
           username,
         },

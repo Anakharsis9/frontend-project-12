@@ -1,6 +1,7 @@
 import { createSlice, createSelector } from "@reduxjs/toolkit";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQuery, socket } from "@/api";
+import { profanity } from "@/profanity";
 
 export const selectActiveChannelId = (state) => state.channels.activeChannelId;
 
@@ -105,7 +106,7 @@ export const channelsApi = createApi({
         url: "/v1/channels",
         method: "POST",
         body: {
-          name,
+          name: profanity.censor(name),
         },
       }),
     }),
@@ -120,7 +121,7 @@ export const channelsApi = createApi({
         url: `/v1/channels/${id}`,
         method: "PATCH",
         body: {
-          name,
+          name: profanity.censor(name),
         },
       }),
     }),

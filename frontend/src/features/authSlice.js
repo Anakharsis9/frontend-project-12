@@ -1,4 +1,5 @@
 import { baseQuery } from "@/api";
+import { profanity } from "@/profanity";
 import { createSlice } from "@reduxjs/toolkit";
 import { createApi } from "@reduxjs/toolkit/query/react";
 
@@ -63,7 +64,7 @@ export const authApi = createApi({
         url: "/v1/signup",
         method: "POST",
         body: {
-          username,
+          username: profanity.censor(username),
           password,
         },
       }),
