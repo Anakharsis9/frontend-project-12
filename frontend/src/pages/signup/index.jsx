@@ -1,5 +1,5 @@
-import { useFormik } from "formik";
-import { useNavigate } from "react-router";
+import { useFormik } from 'formik'
+import { useNavigate } from 'react-router'
 import {
   FloatingLabel,
   Button,
@@ -8,51 +8,51 @@ import {
   Row,
   Col,
   Card,
-} from "react-bootstrap";
-import * as Yup from "yup";
+} from 'react-bootstrap'
+import * as Yup from 'yup'
 
-import { useSignupMutation } from "@/features/authSlice";
+import { useSignupMutation } from '@/features/authSlice'
 // @ts-ignore
-import formImageSrc from "./form-image.jpg";
-import { useTranslation } from "react-i18next";
+import formImageSrc from './form-image.jpg'
+import { useTranslation } from 'react-i18next'
 
 export const SignupPage = () => {
-  const navigate = useNavigate();
-  const [signup, { isLoading }] = useSignupMutation();
-  const { t } = useTranslation();
+  const navigate = useNavigate()
+  const [signup, { isLoading }] = useSignupMutation()
+  const { t } = useTranslation()
 
   const formik = useFormik({
-    initialValues: { username: "", password: "", confirmPassword: "" },
+    initialValues: { username: '', password: '', confirmPassword: '' },
     validateOnBlur: false,
     validateOnChange: true,
     validationSchema: Yup.object().shape({
       username: Yup.string()
-        .min(3, t("common.errors.identityLength"))
-        .max(20, t("common.errors.identityLength"))
-        .required(t("common.errors.required")),
+        .min(3, t('common.errors.identityLength'))
+        .max(20, t('common.errors.identityLength'))
+        .required(t('common.errors.required')),
       password: Yup.string()
-        .min(6, t("signup.errors.passwordLength"))
-        .required(t("common.errors.required")),
+        .min(6, t('signup.errors.passwordLength'))
+        .required(t('common.errors.required')),
       confirmPassword: Yup.string().equals(
-        [Yup.ref("password")],
-        t("signup.errors.passwordMatch")
+        [Yup.ref('password')],
+        t('signup.errors.passwordMatch'),
       ),
     }),
     onSubmit: ({ username, password }, { setErrors }) => {
       signup({ username, password })
         .unwrap()
         .then(() => {
-          navigate("/");
+          navigate('/')
         })
         .catch((response) => {
-          if (response?.data?.error?.includes("Conflict")) {
+          if (response?.data?.error?.includes('Conflict')) {
             setErrors({
-              username: t("signup.errors.conflict"),
-            });
+              username: t('signup.errors.conflict'),
+            })
           }
-        });
+        })
     },
-  });
+  })
 
   return (
     <Container fluid className="h-100">
@@ -62,13 +62,13 @@ export const SignupPage = () => {
             <Card.Body className="d-flex flex-column flex-md-row justify-content-around align-items-center p-5">
               <img
                 src={formImageSrc}
-                alt={t("signup.title")}
+                alt={t('signup.title')}
                 className="rounded-circle"
               />
               <Form onSubmit={formik.handleSubmit} className="w-50">
-                <h1 className="text-center mb-4">{t("signup.title")}</h1>
+                <h1 className="text-center mb-4">{t('signup.title')}</h1>
                 <FloatingLabel
-                  label={t("signup.labels.username")}
+                  label={t('signup.labels.username')}
                   className="mb-3"
                   controlId="username"
                 >
@@ -77,7 +77,7 @@ export const SignupPage = () => {
                     name="username"
                     autoComplete="username"
                     className="form-control"
-                    placeholder={t("signup.labels.username")}
+                    placeholder={t('signup.labels.username')}
                     value={formik.values.username}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -90,7 +90,7 @@ export const SignupPage = () => {
                   </Form.Control.Feedback>
                 </FloatingLabel>
                 <FloatingLabel
-                  label={t("signup.labels.password")}
+                  label={t('signup.labels.password')}
                   className="mb-3"
                   controlId="password"
                 >
@@ -99,7 +99,7 @@ export const SignupPage = () => {
                     name="password"
                     autoComplete="password"
                     className="form-control"
-                    placeholder={t("signup.labels.password")}
+                    placeholder={t('signup.labels.password')}
                     value={formik.values.password}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -112,7 +112,7 @@ export const SignupPage = () => {
                   </Form.Control.Feedback>
                 </FloatingLabel>
                 <FloatingLabel
-                  label={t("signup.labels.confirmPassword")}
+                  label={t('signup.labels.confirmPassword')}
                   className="mb-4"
                   controlId="confirmPassword"
                 >
@@ -120,13 +120,13 @@ export const SignupPage = () => {
                     type="password"
                     name="confirmPassword"
                     className="form-control"
-                    placeholder={t("signup.labels.confirmPassword")}
+                    placeholder={t('signup.labels.confirmPassword')}
                     value={formik.values.confirmPassword}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     isInvalid={
-                      !!formik.errors.confirmPassword &&
-                      formik.touched.confirmPassword
+                      !!formik.errors.confirmPassword
+                      && formik.touched.confirmPassword
                     }
                   />
                   <Form.Control.Feedback type="invalid" tooltip>
@@ -139,7 +139,7 @@ export const SignupPage = () => {
                   disabled={isLoading}
                   className="w-100"
                 >
-                  {t("signup.labels.action")}
+                  {t('signup.labels.action')}
                 </Button>
               </Form>
             </Card.Body>
@@ -147,5 +147,5 @@ export const SignupPage = () => {
         </Col>
       </Row>
     </Container>
-  );
-};
+  )
+}

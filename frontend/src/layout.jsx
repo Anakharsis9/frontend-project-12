@@ -1,17 +1,17 @@
-import { Outlet, useNavigate } from "react-router";
-import { useSelector, useDispatch } from "react-redux";
-import { Navbar, Container, Button, Dropdown } from "react-bootstrap";
+import { Outlet, useNavigate } from 'react-router'
+import { useSelector, useDispatch } from 'react-redux'
+import { Navbar, Container, Button, Dropdown } from 'react-bootstrap'
 
-import { logout, selectUser } from "./features/authSlice";
-import { ToastContainer } from "react-toastify";
-import { useTranslation } from "react-i18next";
-import { capitalize } from "./utils";
+import { logout, selectUser } from './features/authSlice'
+import { ToastContainer } from 'react-toastify'
+import { useTranslation } from 'react-i18next'
+import { capitalize } from './utils'
 
 export const AppLayout = () => {
-  const navigate = useNavigate();
-  const user = useSelector(selectUser);
-  const dispatch = useDispatch();
-  const { t, i18n } = useTranslation();
+  const navigate = useNavigate()
+  const user = useSelector(selectUser)
+  const dispatch = useDispatch()
+  const { t, i18n } = useTranslation()
 
   return (
     <div className="d-flex flex-column h-100 bg-light">
@@ -24,10 +24,10 @@ export const AppLayout = () => {
                 {capitalize(i18n.language)}
               </Dropdown.Toggle>
               <Dropdown.Menu>
-                <Dropdown.Item onClick={() => i18n.changeLanguage("ru")}>
+                <Dropdown.Item onClick={() => i18n.changeLanguage('ru')}>
                   Ru
                 </Dropdown.Item>
-                <Dropdown.Item onClick={() => i18n.changeLanguage("en")}>
+                <Dropdown.Item onClick={() => i18n.changeLanguage('en')}>
                   En
                 </Dropdown.Item>
               </Dropdown.Menu>
@@ -36,11 +36,11 @@ export const AppLayout = () => {
               <Button
                 variant="primary"
                 onClick={() => {
-                  dispatch(logout());
-                  navigate("/login");
+                  dispatch(logout())
+                  navigate('/login')
                 }}
               >
-                {t("logout")}
+                {t('logout')}
               </Button>
             )}
           </div>
@@ -49,5 +49,5 @@ export const AppLayout = () => {
       <Outlet />
       <ToastContainer />
     </div>
-  );
-};
+  )
+}

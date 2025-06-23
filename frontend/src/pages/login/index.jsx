@@ -1,5 +1,5 @@
-import { useFormik } from "formik";
-import { useNavigate, Link } from "react-router";
+import { useFormik } from 'formik'
+import { useNavigate, Link } from 'react-router'
 import {
   FloatingLabel,
   Button,
@@ -8,38 +8,38 @@ import {
   Row,
   Col,
   Card,
-} from "react-bootstrap";
+} from 'react-bootstrap'
 
-import { useLoginMutation } from "@/features/authSlice";
+import { useLoginMutation } from '@/features/authSlice'
 // @ts-ignore
-import formImageSrc from "./form-image.jpg";
-import { useTranslation } from "react-i18next";
+import formImageSrc from './form-image.jpg'
+import { useTranslation } from 'react-i18next'
 
 export const LoginPage = () => {
-  const navigate = useNavigate();
-  const [login, { isLoading }] = useLoginMutation();
-  const { t } = useTranslation();
+  const navigate = useNavigate()
+  const [login, { isLoading }] = useLoginMutation()
+  const { t } = useTranslation()
 
   const formik = useFormik({
-    initialValues: { username: "", password: "" },
+    initialValues: { username: '', password: '' },
     validateOnBlur: false,
     validateOnChange: true,
     onSubmit: ({ username, password }, { setErrors }) => {
       login({ username, password })
         .unwrap()
         .then(() => {
-          navigate("/");
+          navigate('/')
         })
         .catch((response) => {
-          if (response?.data?.error?.includes("Unauthorized")) {
+          if (response?.data?.error?.includes('Unauthorized')) {
             setErrors({
-              username: "Unauthorized",
-              password: t("login.errors.unauthorized"),
-            });
+              username: 'Unauthorized',
+              password: t('login.errors.unauthorized'),
+            })
           }
-        });
+        })
     },
-  });
+  })
 
   return (
     <Container fluid className="h-100">
@@ -54,7 +54,7 @@ export const LoginPage = () => {
               >
                 <img
                   src={formImageSrc}
-                  alt={t("login.title")}
+                  alt={t('login.title')}
                   className="rounded-circle"
                 />
               </Col>
@@ -62,9 +62,9 @@ export const LoginPage = () => {
                 onSubmit={formik.handleSubmit}
                 className="col-12 col-md-6 mt-3 mt-md-0"
               >
-                <h1 className="text-center mb-4">{t("login.title")}</h1>
+                <h1 className="text-center mb-4">{t('login.title')}</h1>
                 <FloatingLabel
-                  label={t("login.labels.username")}
+                  label={t('login.labels.username')}
                   className="mb-3"
                   controlId="username"
                 >
@@ -73,7 +73,7 @@ export const LoginPage = () => {
                     name="username"
                     autoComplete="username"
                     className="form-control"
-                    placeholder={t("login.labels.username")}
+                    placeholder={t('login.labels.username')}
                     value={formik.values.username}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -81,7 +81,7 @@ export const LoginPage = () => {
                   />
                 </FloatingLabel>
                 <FloatingLabel
-                  label={t("login.labels.password")}
+                  label={t('login.labels.password')}
                   className="mb-4"
                   controlId="password"
                 >
@@ -90,7 +90,7 @@ export const LoginPage = () => {
                     name="password"
                     autoComplete="password"
                     className="form-control"
-                    placeholder={t("login.labels.password")}
+                    placeholder={t('login.labels.password')}
                     value={formik.values.password}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -106,19 +106,20 @@ export const LoginPage = () => {
                   disabled={isLoading}
                   className="w-100 mb-3"
                 >
-                  {t("login.labels.action")}
+                  {t('login.labels.action')}
                 </Button>
               </Form>
             </Card.Body>
             <Card.Footer className="p-4">
               <div className="text-center">
-                {t("login.signup.hint")}{" "}
-                <Link to="/signup">{t("login.signup.link")}</Link>
+                {t('login.signup.hint')}
+                {' '}
+                <Link to="/signup">{t('login.signup.link')}</Link>
               </div>
             </Card.Footer>
           </Card>
         </Col>
       </Row>
     </Container>
-  );
-};
+  )
+}

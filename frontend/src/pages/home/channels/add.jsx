@@ -2,32 +2,32 @@ import {
   selectChannels,
   switchActiveChannel,
   useAddChannelMutation,
-} from "@/features/channelsSlice";
-import { useFormik } from "formik";
-import { useState } from "react";
-import { Button, Form, Modal, Spinner } from "react-bootstrap";
-import { useTranslation } from "react-i18next";
-import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
-import * as Yup from "yup";
+} from '@/features/channelsSlice'
+import { useFormik } from 'formik'
+import { useState } from 'react'
+import { Button, Form, Modal, Spinner } from 'react-bootstrap'
+import { useTranslation } from 'react-i18next'
+import { useDispatch, useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
+import * as Yup from 'yup'
 
 const AddNewChannelModal = ({ show, onHide }) => {
-  const { t } = useTranslation();
-  const [addChannel, { isLoading: isAddChannelLoading }] =
-    useAddChannelMutation();
-  const channels = useSelector(selectChannels);
-  const dispatch = useDispatch();
+  const { t } = useTranslation()
+  const [addChannel, { isLoading: isAddChannelLoading }]
+    = useAddChannelMutation()
+  const channels = useSelector(selectChannels)
+  const dispatch = useDispatch()
 
   const formik = useFormik({
-    initialValues: { name: "" },
+    initialValues: { name: '' },
     validationSchema: Yup.object().shape({
       name: Yup.string()
-        .min(3, t("common.errors.identityLength"))
-        .max(20, t("common.errors.identityLength"))
-        .required(t("common.errors.required"))
+        .min(3, t('common.errors.identityLength'))
+        .max(20, t('common.errors.identityLength'))
+        .required(t('common.errors.required'))
         .notOneOf(
-          channels.map((channel) => channel.name),
-          t("channels.add.errors.uniqueName")
+          channels.map(channel => channel.name),
+          t('channels.add.errors.uniqueName'),
         ),
     }),
     validateOnBlur: false,
@@ -35,23 +35,23 @@ const AddNewChannelModal = ({ show, onHide }) => {
     validateOnMount: false,
     onSubmit: ({ name }, { resetForm }) => {
       addChannel({ name }).then(({ data }) => {
-        onHide();
-        resetForm();
-        dispatch(switchActiveChannel(data.id));
-        toast.success(t("channels.add.successMessage"));
-      });
+        onHide()
+        resetForm()
+        dispatch(switchActiveChannel(data.id))
+        toast.success(t('channels.add.successMessage'))
+      })
     },
-  });
+  })
 
   const handleHide = () => {
-    onHide();
-    formik.resetForm();
-  };
+    onHide()
+    formik.resetForm()
+  }
 
   return (
     <Modal show={show} onHide={handleHide} centered>
       <Modal.Header closeButton>
-        <Modal.Title>{t("channels.add.title")}</Modal.Title>
+        <Modal.Title>{t('channels.add.title')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={formik.handleSubmit}>
@@ -68,7 +68,7 @@ const AddNewChannelModal = ({ show, onHide }) => {
             disabled={isAddChannelLoading}
           />
           <label htmlFor="name" className="visually-hidden">
-            {t("channels.add.aria")}
+            {t('channels.add.aria')}
           </label>
           <Form.Control.Feedback type="invalid">
             {formik.errors.name}
@@ -80,28 +80,30 @@ const AddNewChannelModal = ({ show, onHide }) => {
               onClick={handleHide}
               disabled={isAddChannelLoading}
             >
-              {t("common.actions.cancel")}
+              {t('common.actions.cancel')}
             </Button>
             <Button
               variant="primary"
               type="submit"
               disabled={isAddChannelLoading}
             >
-              {isAddChannelLoading ? (
-                <Spinner variant="secondary" animation="border" size="sm" />
-              ) : (
-                t("common.actions.send")
-              )}
+              {isAddChannelLoading
+                ? (
+                    <Spinner variant="secondary" animation="border" size="sm" />
+                  )
+                : (
+                    t('common.actions.send')
+                  )}
             </Button>
           </div>
         </Form>
       </Modal.Body>
     </Modal>
-  );
-};
+  )
+}
 
 export const AddNewChannelButton = () => {
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(false)
 
   return (
     <>
@@ -124,5 +126,5 @@ export const AddNewChannelButton = () => {
       </button>
       <AddNewChannelModal show={show} onHide={() => setShow(false)} />
     </>
-  );
-};
+  )
+}

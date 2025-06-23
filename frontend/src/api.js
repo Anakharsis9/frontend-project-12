@@ -1,20 +1,20 @@
-import { fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { io } from "socket.io-client";
+import { fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { io } from 'socket.io-client'
 
 export const baseQuery = fetchBaseQuery({
-  baseUrl: "/api",
+  baseUrl: '/api',
   prepareHeaders: (headers, { getState }) => {
     // @ts-ignore
-    const user = getState().auth.user;
+    const user = getState().auth.user
     if (user?.token) {
-      headers.set("Authorization", `Bearer ${user.token}`);
+      headers.set('Authorization', `Bearer ${user.token}`)
     }
-    return headers;
+    return headers
   },
-});
+})
 export const socket = io({
-  path: "/socket.io",
-  transports: ["websocket"],
+  path: '/socket.io',
+  transports: ['websocket'],
   autoConnect: true,
   reconnection: true,
-});
+})

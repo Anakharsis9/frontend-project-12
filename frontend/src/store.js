@@ -1,8 +1,8 @@
-import { configureStore } from "@reduxjs/toolkit";
-import { setupListeners } from "@reduxjs/toolkit/query/react";
-import authReducer, { authApi } from "./features/authSlice";
-import channelsSlice, { channelsApi } from "./features/channelsSlice";
-import messagesSlice, { messagesApi } from "./features/messagesSlice";
+import { configureStore } from '@reduxjs/toolkit'
+import { setupListeners } from '@reduxjs/toolkit/query/react'
+import authReducer, { authApi } from './features/authSlice'
+import channelsSlice, { channelsApi } from './features/channelsSlice'
+import messagesSlice, { messagesApi } from './features/messagesSlice'
 
 export const store = configureStore({
   reducer: {
@@ -10,12 +10,12 @@ export const store = configureStore({
     ...channelsSlice,
     ...messagesSlice,
   },
-  middleware: (getDefaultMiddleware) =>
+  middleware: getDefaultMiddleware =>
     getDefaultMiddleware().concat(
       authApi.middleware,
       channelsApi.middleware,
-      messagesApi.middleware
+      messagesApi.middleware,
     ),
-});
+})
 
-setupListeners(store.dispatch);
+setupListeners(store.dispatch)
