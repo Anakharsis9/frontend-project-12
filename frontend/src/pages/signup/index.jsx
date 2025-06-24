@@ -33,7 +33,7 @@ export const SignupPage = () => {
       password: Yup.string()
         .min(6, t('signup.errors.passwordLength'))
         .required(t('common.errors.required')),
-      confirmPassword: Yup.string().equals(
+      confirmPassword: Yup.string().required(t('common.errors.required')).equals(
         [Yup.ref('password')],
         t('signup.errors.passwordMatch'),
       ),
@@ -45,7 +45,7 @@ export const SignupPage = () => {
           navigate('/')
         })
         .catch((response) => {
-          if (response?.data?.error?.includes('Conflict')) {
+          if (response?.status === 409) {
             setErrors({
               username: t('signup.errors.conflict'),
             })

@@ -31,7 +31,7 @@ export const LoginPage = () => {
           navigate('/')
         })
         .catch((response) => {
-          if (response?.data?.error?.includes('Unauthorized')) {
+          if (response?.status === 401) {
             setErrors({
               username: 'Unauthorized',
               password: t('login.errors.unauthorized'),
