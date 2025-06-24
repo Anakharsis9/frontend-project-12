@@ -4,7 +4,6 @@ import { io } from 'socket.io-client'
 export const baseQuery = fetchBaseQuery({
   baseUrl: '/api',
   prepareHeaders: (headers, { getState }) => {
-    // @ts-ignore
     const user = getState().auth.user
     if (user?.token) {
       headers.set('Authorization', `Bearer ${user.token}`)
