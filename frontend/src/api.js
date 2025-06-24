@@ -36,7 +36,6 @@ export const socket = io({
 })
 
 socket.io.on('reconnect', () => {
-  console.log('reconnect')
   toast.info(i18n.t('common.errors.networkOnline'))
   toast.done('network-status')
 })
