@@ -72,5 +72,10 @@ export const en = {
         successMessage: 'Channel renamed',
       },
     },
+    notFound: {
+      title: 'Page not found',
+      hint: 'But you can go',
+      link: 'to the main page',
+    },
   },
 }

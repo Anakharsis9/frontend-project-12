@@ -67,7 +67,6 @@ export const channelsApi = createApi({
           }
         }
         const removeChannelListener = (data) => {
-          // @ts-ignore
           if (selectActiveChannelId(getState()) === data.id) {
             const channels = selectChannels(getState())
             dispatch(switchActiveChannel(channels[0]?.id))
