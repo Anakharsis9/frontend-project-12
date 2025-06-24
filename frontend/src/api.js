@@ -35,8 +35,8 @@ export const socket = io({
   reconnection: true,
 })
 
-socket.on('reconnect', () => {
-  if (navigator.onLine) {
+socket.on('connect', () => {
+  if (socket.recovered) {
     toast.info(i18n.t('common.errors.networkOnline'))
     toast.done('network-status')
   }
