@@ -35,18 +35,15 @@ export const socket = io({
   reconnection: true,
 })
 
-socket.on('connect', () => {
-  if (socket.recovered) {
-    toast.info(i18n.t('common.errors.networkOnline'))
-    toast.done('network-status')
-  }
+socket.io.on('reconnect', () => {
+  console.log('reconnect')
+  toast.info(i18n.t('common.errors.networkOnline'))
+  toast.done('network-status')
 })
 
-socket.on('connect_error', () => {
-  if (!navigator.onLine) {
-    toast.warn(i18n.t('common.errors.networkOffline'), {
-      autoClose: false,
-      toastId: 'network-status',
-    })
-  }
+socket.io.on('reconnect_error', () => {
+  toast.warn(i18n.t('common.errors.networkOffline'), {
+    autoClose: false,
+    toastId: 'network-status',
+  })
 })
