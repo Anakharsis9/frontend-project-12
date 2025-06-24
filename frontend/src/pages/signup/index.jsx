@@ -12,8 +12,7 @@ import {
 import * as Yup from 'yup'
 
 import { useSignupMutation } from '@/features/authSlice'
-// @ts-ignore
-import formImageSrc from './form-image.jpg'
+import formImageSrc from '@/assets/images/form-image-signup.jpg'
 import { useTranslation } from 'react-i18next'
 
 export const SignupPage = () => {

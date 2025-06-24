@@ -11,8 +11,7 @@ import {
 } from 'react-bootstrap'
 
 import { useLoginMutation } from '@/features/authSlice'
-// @ts-ignore
-import formImageSrc from './form-image.jpg'
+import formImageSrc from '@/assets/images/form-image-login.jpg'
 import { useTranslation } from 'react-i18next'
 
 export const LoginPage = () => {
