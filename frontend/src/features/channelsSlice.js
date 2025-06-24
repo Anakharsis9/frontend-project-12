@@ -32,7 +32,7 @@ export const { switchActiveChannel } = channelsSlice.actions
 export const channelsApi = createApi({
   reducerPath: 'channelsApi',
   tagTypes: ['channels'],
-  baseQuery,
+  baseQuery: baseQuery.withTokenHandler,
   endpoints: build => ({
     getChannels: build.query({
       query: () => ({

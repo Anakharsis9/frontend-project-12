@@ -2,6 +2,7 @@ import { fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { io } from 'socket.io-client'
 import { i18n } from './i18n'
 import { toast } from 'react-toastify'
+import { logout } from '@/features/authSlice'
 
 export const baseQuery = fetchBaseQuery({
   baseUrl: '/api',
@@ -13,6 +14,20 @@ export const baseQuery = fetchBaseQuery({
     return headers
   },
 })
+baseQuery.withTokenHandler = async (args, api, extraOptions) => {
+  const result = await baseQuery(args, api, extraOptions)
+
+  if (result?.error?.status === 401) {
+    api.dispatch(logout())
+    toast.info(i18n.t('common.errors.tokenExpiration'))
+  }
+  else if (typeof result?.error?.status === 'number' && result.error.status > 400) {
+    toast.error(result.error.data?.error || i18n.t('common.errors.generic'))
+  }
+
+  return result
+}
+
 export const socket = io({
   path: '/socket.io',
   transports: ['websocket'],

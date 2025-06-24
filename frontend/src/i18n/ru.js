@@ -2,11 +2,13 @@ export const ru = {
   translation: {
     common: {
       errors: {
+        generic: 'Что-то пошло не так',
         identityLength: 'От 3 до 20 символов',
         required: 'Обязательное поле',
         uniqueName: 'Должно быть уникальным',
         networkOffline: 'Ошибка соединения',
         networkOnline: 'Соединение восстановлено',
+        tokenExpiration: 'Сессия устарела, войдите заново',
       },
       actions: {
         cancel: 'Отменить',

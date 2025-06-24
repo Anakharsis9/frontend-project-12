@@ -2,11 +2,13 @@ export const en = {
   translation: {
     common: {
       errors: {
+        generic: 'Something went wrong',
         identityLength: 'From 3 to 20 characters',
         required: 'Required field',
         uniqueName: 'Must be unique',
         networkOffline: 'Connection error',
         networkOnline: 'Connection restored',
+        tokenExpiration: 'Session has expired, login again',
       },
       actions: {
         cancel: 'Cancel',

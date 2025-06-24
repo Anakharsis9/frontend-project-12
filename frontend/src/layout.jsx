@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from 'react-router'
+import { Outlet, useLocation, useNavigate } from 'react-router'
 import { useSelector, useDispatch } from 'react-redux'
 import { Navbar, Container, Button, Dropdown } from 'react-bootstrap'
 
@@ -6,12 +6,25 @@ import { logout, selectUser } from './features/authSlice'
 import { ToastContainer } from 'react-toastify'
 import { useTranslation } from 'react-i18next'
 import { capitalize } from './utils'
+import { useEffect } from 'react'
+import { publicPaths } from './router'
 
 export const AppLayout = () => {
   const navigate = useNavigate()
+  const location = useLocation()
   const user = useSelector(selectUser)
   const dispatch = useDispatch()
   const { t, i18n } = useTranslation()
+
+  useEffect(() => {
+    const isPublic = publicPaths.includes(location.pathname)
+    if (!user && !isPublic) {
+      navigate('/login')
+    }
+    else if (user && isPublic) {
+      navigate('/')
+    }
+  }, [user])
 
   return (
     <div className="d-flex flex-column h-100 bg-light">
@@ -37,7 +50,6 @@ export const AppLayout = () => {
                 variant="primary"
                 onClick={() => {
                   dispatch(logout())
-                  navigate('/login')
                 }}
               >
                 {t('logout')}

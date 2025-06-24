@@ -7,7 +7,7 @@ import { profanity } from '@/profanity'
 export const messagesApi = createApi({
   reducerPath: 'messagesApi',
   tagTypes: ['messages'],
-  baseQuery,
+  baseQuery: baseQuery.withTokenHandler,
   endpoints: build => ({
     getMessages: build.query({
       query: () => ({

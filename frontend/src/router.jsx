@@ -7,6 +7,8 @@ import { LoginPage } from './pages/login'
 import { SignupPage } from './pages/signup'
 import { NotFoundPage } from './pages/404'
 
+export const publicPaths = ['/login', '/signup']
+
 export const router = createBrowserRouter([
   {
     path: '/',
